@@ -3,6 +3,8 @@
 A simple Unity platformer made for a practical class with a special focus on game feel and game design. 
 The main goal of this class was to produce a good playing experience within the platformer by offering pleasing controls, as well as lively feedbacks for the player (simple special effects, animations, sound effects, etc...).
 
+<img src="./level_1.png" alt="Level 1">
+
 More explicit directives for this class included:
 
 <ul>
