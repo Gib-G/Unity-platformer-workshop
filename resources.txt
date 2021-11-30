@@ -1,0 +1,12 @@
+-> RFID-RC522 datasheet: https://www.gotronic.fr/pj2-sbc-rfid-rc522-fr-1439.pdf
+
+-> GitHub repo of the lib for RFID: https://github.com/miguelbalboa/rfid
+
+-> How to plug RC522 with an ESP8266 + basic things:
+http://electroniqueamateur.blogspot.com/2019/02/module-rfid-rc522-et-esp8266.html
+
+-> More details about RC522, the EEPROM structure, how to write data, etc:
+https://www.electronicshub.org/write-data-to-rfid-card-using-rc522-rfid/
+http://sammy76.free.fr/conseils/electronique/mifare/rfid.php
+
+-> LCD screen lib demo: https://www.losant.com/blog/how-to-connect-lcd-esp8266-nodemcu
