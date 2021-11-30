@@ -73,6 +73,3 @@ crashlytics-build.properties
 
 # MS Word temp files
 *~*.docx
-
-# Illustration for the README
-/level_1.png
