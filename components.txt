@@ -1,0 +1,10 @@
+-> Emprunté le 30/11 :
+- 1 ESP
+- 1 breadboard
+- 1 module RFID RC522
+- 1 écran LCD
+- 2 LED (rouge et verte)
+- 2 résistances 100
+- 18 fils f/m
+- 21 fils m/m
+- 1 interrupteur
