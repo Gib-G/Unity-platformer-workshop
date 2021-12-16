@@ -8,7 +8,4 @@ public class TileAttributes : MonoBehaviour
     public bool isLevelGoal = false;
     public bool isDeathBlock = false;
     public bool isTerminal = false;
-
-    // If this tile is a terminal.
-    public GameObject terminal;
 }

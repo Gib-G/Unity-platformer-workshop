@@ -395,12 +395,13 @@ public class Player : MonoBehaviour
     void RespondToTileType()
     {
         var tile = tilemap[Position];
-        if (tile == null) return;
+        if (tile == null) { Debug.Log("Nothing here..."); return; }
         if (tile.isLevelGoal) Game.CompleteLevel();
         else if (tile.isDeathBlock) Game.RetryLevel();
         else if(tile.isTerminal)
         {
-            Debug.Log("This is a terminal!");
+            Terminal terminal = tile.gameObject.GetComponent<Terminal>();
+            Debug.Log("This is a terminal " + terminal.number);
         }
     }
 

@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 5875734029224746791}
   - component: {fileID: -4313441885556588580}
   - component: {fileID: 7161566901909492784}
+  - component: {fileID: 4309045867402596913}
   m_Layer: 0
   m_Name: Terminal
   m_TagString: Untagged
@@ -99,4 +100,17 @@ MonoBehaviour:
   isLevelGoal: 0
   isDeathBlock: 0
   isTerminal: 1
-  terminal: {fileID: 0}
+--- !u!114 &4309045867402596913
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 644148014462488440}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b91a7f3bebcdfa4787416bb943c9eaa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  number: 0
+  employeeId: 159962
