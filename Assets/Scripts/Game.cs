@@ -18,7 +18,7 @@ public class Game
     public static bool FeedbacksActivated { get; set; } = true;
 
     // Stores the names of the level scenes in order
-    private static string[] levelSceneNames = { "Level1", "Level2" };
+    private static string[] levelSceneNames = { "Level1", "Level2", "Level3" };
 
     // The name of the start menu scene
     private static string startMenuSceneName = "StartMenu";
