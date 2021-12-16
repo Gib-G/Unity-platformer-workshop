@@ -398,6 +398,10 @@ public class Player : MonoBehaviour
         if (tile == null) return;
         if (tile.isLevelGoal) Game.CompleteLevel();
         else if (tile.isDeathBlock) Game.RetryLevel();
+        else if(tile.isTerminal)
+        {
+            Debug.Log("This is a terminal!");
+        }
     }
 
     // Animation coroutines
