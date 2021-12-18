@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4715776782381904754}
   - component: {fileID: -1301994598680027132}
   m_Layer: 0
-  m_Name: Death Block
+  m_Name: Lava
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
