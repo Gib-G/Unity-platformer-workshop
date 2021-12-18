@@ -18,17 +18,16 @@ public class TerminalHandler : MonoBehaviour
     public void activateTerminal()
     {
         Time.timeScale = 0;
-        activatedTerminalScreen.SetActive(true);
         hackedTerminalScreen.SetActive(false);
+        activatedTerminalScreen.SetActive(true);
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(activatedTerminalScreenPreselectedButton);
     }
 
     public void hackTerminal()
     {
-        Debug.Log("Hack clicked");
-        hackedTerminalScreen.SetActive(true);
         activatedTerminalScreen.SetActive(false);
+        hackedTerminalScreen.SetActive(true);
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(hackedTerminalScreenPreselectedButton);
     }
