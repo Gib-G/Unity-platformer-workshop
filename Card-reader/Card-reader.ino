@@ -29,15 +29,17 @@ MFRC522::MIFARE_Key key;
 
 MFRC522::StatusCode status;
 
+LiquidCrystal lcd(LCD_RS, LCD_ENABLE, LCD_D4, LCD_D5, LCD_D6, LCD_D7);
+
 void setup() {
 
   pinMode(LED_RED, OUTPUT);
   pinMode(LED_GREEN, OUTPUT);
-
-  LiquidCrystal lcd(LCD_RS, LCD_ENABLE, LCD_D4, LCD_D5, LCD_D6, LCD_D7);
+  digitalWrite(LED_GREEN, LOW);
+  digitalWrite(LED_RED, LOW);
 
   lcd.begin(16,1);
-  lcd.print("Hello world!");
+  lcd.print("Salut l'ami !");
 
   // Initialisation du port série.
   Serial.begin(115200);
@@ -58,10 +60,7 @@ void setup() {
 }
 
 void loop() {
-
-  digitalWrite(LED_GREEN, LOW);
-  digitalWrite(LED_RED, HIGH);
-
+  
   for (byte i = 0; i < 6; i++) {
     key.keyByte[i] = 0xFF;
   }
@@ -126,4 +125,15 @@ void loop() {
   mfrc522.PICC_DumpToSerial(&(mfrc522.uid));
   */
 
+}
+
+void serialEvent() {
+  String message = Serial.readStringUntil('\r');
+  if(message == "INIT") digitalWrite(LED_GREEN, HIGH);
+
+  // Manual control.
+  else if(message == "LED_GREEN_ON") digitalWrite(LED_GREEN, HIGH);
+  else if(message == "LED_GREEN_OFF") digitalWrite(LED_GREEN, LOW);
+  else if(message == "LED_RED_ON") digitalWrite(LED_RED, HIGH);
+  else if(message == "LED_RED_OFF") digitalWrite(LED_RED, LOW);
 }

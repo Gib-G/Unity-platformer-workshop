@@ -9150,6 +9150,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1584397208633461459, guid: b8cb26941ab79784898e89828540ce5f, type: 3}
+      propertyPath: baudrate
+      value: 115200
+      objectReference: {fileID: 0}
+    - target: {fileID: 1584397208633461459, guid: b8cb26941ab79784898e89828540ce5f, type: 3}
+      propertyPath: serialPort
+      value: COM3
+      objectReference: {fileID: 0}
     - target: {fileID: 1584397208633461461, guid: b8cb26941ab79784898e89828540ce5f, type: 3}
       propertyPath: m_Camera
       value: 
@@ -9157,6 +9165,10 @@ PrefabInstance:
     - target: {fileID: 1584397208633461462, guid: b8cb26941ab79784898e89828540ce5f, type: 3}
       propertyPath: m_Name
       value: TerminalHandler
+      objectReference: {fileID: 0}
+    - target: {fileID: 3064482001166611634, guid: b8cb26941ab79784898e89828540ce5f, type: 3}
+      propertyPath: m_Color.a
+      value: 0.8156863
       objectReference: {fileID: 0}
     - target: {fileID: 4394976010279857409, guid: b8cb26941ab79784898e89828540ce5f, type: 3}
       propertyPath: m_Name

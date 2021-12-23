@@ -404,7 +404,7 @@ public class Player : MonoBehaviour
             Debug.Log("This is a terminal " + terminal.number);
             GameObject temp = GameObject.Find("TerminalHandler");
             TerminalHandler terminalHandler = temp.GetComponent<TerminalHandler>();
-            terminalHandler.activateTerminal();
+            terminalHandler.activateTerminal(terminal);
         }
     }
 

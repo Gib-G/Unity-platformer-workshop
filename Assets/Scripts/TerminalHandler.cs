@@ -15,9 +15,9 @@ public class TerminalHandler : MonoBehaviour
 
     // The name of the serial port to use to communicate with
     // the Arduino.
-    public string serialPort;
+    public string serialPort = "COM3";
 
-    public int baudrate;
+    public int baudrate = 115200;
 
     private SerialPort _serialPort;
 
@@ -29,7 +29,7 @@ public class TerminalHandler : MonoBehaviour
         // Some initialization.
         initScreen = transform.Find("Init").gameObject;
         activatedTerminalScreen = transform.Find("ActivatedTerminal").gameObject;
-        hackedTerminalScreen = transform.Find("hackedTerminal").gameObject;
+        hackedTerminalScreen = transform.Find("HackedTerminal").gameObject;
 
         initScreenPreselectedButton = initScreen.transform.Find("CancelButton").gameObject;
         activatedTerminalScreenPreselectedButton = activatedTerminalScreen.transform.Find("QuitButton").gameObject;
@@ -40,7 +40,10 @@ public class TerminalHandler : MonoBehaviour
         initScreen.SetActive(true);
 
         _serialPort = new SerialPort(serialPort, baudrate);
+
         _serialPort.Open();
+        if (!_serialPort.IsOpen) Debug.LogWarning("Serial port failed to open.");
+        else Debug.Log("Serial port successfully opened!");
 
         // Tells the Arduino to initiate the init phase.
         _serialPort.WriteLine("INIT");
@@ -48,6 +51,8 @@ public class TerminalHandler : MonoBehaviour
 
     public void Update()
     {
+        //_serialPort.WriteLine("Hello!");
+
         if (!initializing || _serialPort.BytesToRead <= 0) return;
 
         // The Arduino has successfully finished its initialization phase.
