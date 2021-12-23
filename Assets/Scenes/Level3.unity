@@ -9158,5 +9158,9 @@ PrefabInstance:
       propertyPath: m_Name
       value: TerminalHandler
       objectReference: {fileID: 0}
+    - target: {fileID: 4394976010279857409, guid: b8cb26941ab79784898e89828540ce5f, type: 3}
+      propertyPath: m_Name
+      value: WarningSign
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b8cb26941ab79784898e89828540ce5f, type: 3}
