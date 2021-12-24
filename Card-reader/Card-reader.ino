@@ -30,7 +30,7 @@ LiquidCrystal lcd(LCD_RS, LCD_ENABLE, LCD_D4, LCD_D5, LCD_D6, LCD_D7);
 // FORWARD DECLARATIONS OF USEFUL FUNCTIONS
 
 // Makes red and/or green LEDs blink numberOfBlinks times
-// periodically (cf. "period" parameter).
+// periodically (cf. "period" parameter in ms).
 // red == true for the red LED to blink.
 // green == true for the green LED to blink.
 // If red && green == true, the LEDs blink alternatively.
@@ -44,12 +44,26 @@ void ledBlink(bool red, bool green, int numberOfBlinks, unsigned int period);
 // The later is impossible only if the first word of the message is too large to
 // fit in one line. In that case, such a word is split between line 1
 // and line 2 with a hyphen.
-// If the message is too long to fit 2 lines (of 16 characters each), 
+// If the message is too long to fit 2 lines (of 16 characters each),
 // the end of it is discarded and not dispalyed.
-void lcdPrint(String const message);
+void lcdPrint(String const& message);
 
 // Clears the LCD.
 void lcdClear();
+
+// Called upon initialization (when "init" is received on
+// the serial bus.
+void initialize();
+
+// Prints message on LCD numberOfPrints times.
+// For each print, " /", " -", " \", or " |" is appended
+// to message to produce a loading effect.
+// Each print is separated by timeStep ms.
+void process(int numberOfPrints, unsigned int timeStep, String message);
+
+// Message buffer: used to buffer messages received from
+// the game on the serial bus.
+String messages[2]{};
 
 void setup() {
   pinMode(LED_RED, OUTPUT);
@@ -81,19 +95,73 @@ void loop() {
 }
 
 void serialEvent() {
-  String message = Serial.readStringUntil('\r');
-  if(message == "INIT") digitalWrite(LED_GREEN, HIGH);
-
+  messages[1] = messages[0];
+  // Gets the last message sent by the game and
+  // put it in the first block of the message buffer.
+  messages[0] = Serial.readStringUntil('\r');
+  // Actions based on the type of messages received.
+  // Initialization phase.
+  if (messages[0] == "init") {
+    initialize();
+  }
+  // We receive the number of a terminal.
+  else if (messages[0] == "1"
+           || messages[0] == "2"
+           || messages[0] == "3"
+           || messages[0] == "4"
+          ) {
+    // The player just arrived in front of a terminal.
+    if (messages[0] != messages[1]) {
+      lcdPrint("Terminal " + messages[0]);
+      ledBlink(true, true, 5, 300);
+    }
+    if (!(mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial())) {
+      return;
+    }
+    // User scans their card/badge.
+    Serial.println("card");
+  }
+  // The player just move away from a terminal.
+  else if (messages[0] == "nan" && messages[1] != messages[0]) {
+    lcdClear();
+  }
+  // Terminal activated!
+  else if (messages[0] == "card:ok") {
+    lcdPrint("Terminal activated!");
+    ledBlink(false, true, 15, 100);
+  }
+  // Auth to terminal failed (wrong ID).
+  else if (messages[0] == "card:ko") {
+    lcdPrint("Access denied!");
+    ledBlink(true, false, 15, 100);
+  }
+  // The player has hacked a terminal.
+  else if (messages[0] == "hacked") {
+    lcdPrint("#&??+--#!(*###o^?_|/!#,??-++/##");
+    ledBlink(true, true, 2, 400);
+  }
+  // Simulates the player writing a new employee ID
+  // into their card/badge.
+  else if (messages[0] == "write") {
+    lcdPrint("Scan your badge to rewrite ID! ->");
+    ledBlink(true, true, 1, 100);
+    // Waiting for the user to scan their badge/card.
+    while (!(mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial())) {}
+    process(20, 100, "Writing new     ID...");
+    lcdPrint("Write done! Badge reconfigured.");
+    ledBlink(false, true, 15, 100);
+    Serial.println("write:ok");
+  }
   // Manual control.
-  else if(message == "LED_GREEN_ON") digitalWrite(LED_GREEN, true);
-  else if(message == "LED_GREEN_OFF") digitalWrite(LED_GREEN, false);
-  else if(message == "LED_RED_ON") digitalWrite(LED_RED, HIGH);
-  else if(message == "LED_RED_OFF") digitalWrite(LED_RED, LOW);
+  else if (messages[0] == "led_green_on") digitalWrite(LED_GREEN, true);
+  else if (messages[0] == "led_green_off") digitalWrite(LED_GREEN, false);
+  else if (messages[0] == "led_red_on") digitalWrite(LED_RED, HIGH);
+  else if (messages[0] == "led_red_off") digitalWrite(LED_RED, LOW);
 }
 
 void ledBlink(bool red, bool green, int numberOfBlinks, unsigned int period) {
   bool toggle{true};
-  for(int k = 0; k < 2 * numberOfBlinks; k++) {
+  for (int k = 0; k < 2 * numberOfBlinks; k++) {
     digitalWrite(LED_RED, red && toggle);
     digitalWrite(LED_GREEN, green && !toggle);
     toggle = !toggle;
@@ -103,24 +171,24 @@ void ledBlink(bool red, bool green, int numberOfBlinks, unsigned int period) {
   digitalWrite(LED_GREEN, false);
 }
 
-void lcdPrint(String const message) {
+void lcdPrint(String const& message) {
   int lines = min(2, (int)(message.length() / 16 + 1));
   lcd.begin(16, lines);
   lcd.clear();
-  if(lines > 1) {
+  if (lines > 1) {
     String line1{};
     String line2{};
     String temp = message.substring(0, 17);
     int index = temp.lastIndexOf(" ");
     // A word is split between line 1 and 2 (index < 15)
     // or the last character of line 1 is a whitespace (index == 15).
-    if(0 < index && index <= 15) {
+    if (0 < index && index <= 15) {
       line1 = message.substring(0, index + 1);
       line2 = message.substring(index + 1);
     }
     // Line 2 starts with a whitespace.
     // We can remove it.
-    else if(index > 15) {
+    else if (index > 15) {
       line1 = message.substring(0, 16);
       line2 = message.substring(17);
     }
@@ -144,4 +212,35 @@ void lcdPrint(String const message) {
 
 void lcdClear() {
   lcd.clear();
+}
+
+void initialize() {
+  ledBlink(true, true, 20, 80);
+  lcdPrint("Please scan your badge! ->");
+  while (!(mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial())) {}
+  process(20, 120, "Scanning...");
+  lcdPrint("Authentication success!");
+  ledBlink(false, true, 15, 100);
+  Serial.println("init:ok");
+}
+
+void process(int numberOfPrints, unsigned int timeStep, String message) {
+  for(int k = 0; k < numberOfPrints; k++) {
+      switch(k % 4) {
+        case 0:
+          message += " /";
+          break;
+        case 1:
+          message += " -";
+          break;
+        case 2:
+          message += " \\";
+          break;
+        case 3:
+          message += " |";
+          break;
+      }
+      lcdPrint(message);
+      delay(timeStep);
+    }
 }
