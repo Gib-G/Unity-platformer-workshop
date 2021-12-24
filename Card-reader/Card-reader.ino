@@ -27,6 +27,8 @@ MFRC522::StatusCode status;
 #define LCD_D6 D6
 #define LCD_D7 D7
 
+// Should be named "lcd" : this global variable is used inside
+// a bunch of functions.
 LiquidCrystal lcd(LCD_RS, LCD_ENABLE, LCD_D4, LCD_D5, LCD_D6, LCD_D7);
 
 // LEDs setup.
@@ -53,10 +55,10 @@ void ledBlink(bool red, bool green, int numberOfBlinks, unsigned int period);
 // and line 2 with a hyphen.
 // If the message is too long to fit 2 lines (of 16 characters each), 
 // the end of it is discarded and not dispalyed.
-void lcdPrint(LiquidCrystal& lcd, String const message);
+void lcdPrint(String const message);
 
 // Clears the LCD.
-void lcdClear(LiquidCrystal& lcd);
+void lcdClear();
 
 void setup() {
 
@@ -70,15 +72,15 @@ void setup() {
   while (!Serial);
 
   ledBlink(true, true, 10, 100);
-  lcdPrint(lcd, "My name is Giovanni Giorgio!");
+  lcdPrint("My name is Giovanni Giorgio!");
   delay(5000);
-  lcdPrint(lcd, "All your base are belong to us!");
+  lcdPrint("All your base are belong to us!");
   delay(5000);
-  lcdPrint(lcd,"azeazazeazeazeazeazezedgd");
+  lcdPrint("azeazazeazeazeazeazezedgd");
   delay(5000);
-  lcdPrint(lcd, "Hello!");
+  lcdPrint("Hello!");
   delay(1000);
-  lcdClear(lcd);
+  lcdClear();
 
   // Initialisation du Module RFID.
   SPI.begin();
@@ -185,7 +187,7 @@ void ledBlink(bool red, bool green, int numberOfBlinks, unsigned int period) {
   digitalWrite(LED_GREEN, false);
 }
 
-void lcdPrint(LiquidCrystal& lcd, String const message) {
+void lcdPrint(String const message) {
   int lines = min(2, (int)(message.length() / 16 + 1));
   lcd.begin(16, lines);
   lcd.clear();
@@ -224,6 +226,6 @@ void lcdPrint(LiquidCrystal& lcd, String const message) {
   lcd.print(message);
 }
 
-void lcdClear(LiquidCrystal& lcd) {
+void lcdClear() {
   lcd.clear();
 }
