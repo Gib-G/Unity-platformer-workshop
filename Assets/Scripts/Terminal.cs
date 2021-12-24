@@ -3,17 +3,23 @@ using UnityEngine;
 
 public class Terminal : MonoBehaviour
 {
-
     public int number;
-    public int employeeId;
+    public int IDToActivate;
 
-    // What the terminal prompts the player when it is activated.
-    [TextArea]
-    public string textPrompt;
+    public bool IsActivated { get; set; } = false;
 
-    // The info the terminal prompts the player after it has been hacked.
+    // Texts displayed within the in-game terminal menus.
+
+    // Text prompted by the terminal when activated.
     [TextArea]
-    public string dataDump;
+    public string textWhenActivated;
+    // First chunk of text prompted by the terminal when hacked.
+    // This has to hold the data-dumped employee table.
+    [TextArea]
+    public string text1WhenHacked;
+    // Second chunk of text prompted by the terminal when hacked.
+    [TextArea]
+    public string text2WhenHacked;
 
     // Use this for initialization
     void Start()

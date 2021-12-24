@@ -81,6 +81,9 @@ public class Player : MonoBehaviour
 
     private bool Dashing => dashStartTime != float.NegativeInfinity;
 
+    // The terminal handler of the level if there is any, null otherwise.
+    private TerminalHandler? terminalHandler;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -110,6 +113,9 @@ public class Player : MonoBehaviour
 
         // And counters
         numJumps = 0;
+
+        // Tries to find a terminal handler.
+        terminalHandler = GameObject.Find("TerminalHandler")?.GetComponent<TerminalHandler>();
     }
 
     // Integrate using semi-implicit Euler
@@ -395,16 +401,19 @@ public class Player : MonoBehaviour
     void RespondToTileType()
     {
         var tile = tilemap[Position];
-        if (tile == null) { Debug.Log("Nothing here..."); return; }
         if (tile.isLevelGoal) Game.CompleteLevel();
         else if (tile.isDeathBlock) Game.RetryLevel();
-        else if(tile.isTerminal)
+
+        if(terminalHandler == null) { return; }
+
+        if(tile.isTerminal)
         {
             Terminal terminal = tile.gameObject.GetComponent<Terminal>();
-            Debug.Log("This is a terminal " + terminal.number);
-            GameObject temp = GameObject.Find("TerminalHandler");
-            TerminalHandler terminalHandler = temp.GetComponent<TerminalHandler>();
-            terminalHandler.activateTerminal(terminal);
+            terminalHandler.sendTerminalNumber(terminal);
+        }
+        else if(tile == null)
+        {
+            terminalHandler.sendTerminalNumber(null);
         }
     }
 
