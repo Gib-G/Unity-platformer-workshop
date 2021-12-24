@@ -63,7 +63,7 @@ void process(int numberOfPrints, unsigned int timeStep, String message);
 
 // Message buffer: used to buffer messages received from
 // the game on the serial bus.
-String messages[2]{};
+String messages[2] {};
 
 void setup() {
   pinMode(LED_RED, OUTPUT);
@@ -83,15 +83,13 @@ void setup() {
 }
 
 void loop() {
-  if (!mfrc522.PICC_IsNewCardPresent()) {
+  if (mfrc522.PICC_IsNewCardPresent()) {
     return;
   }
-  // Une carte a été présentée !
-  if (!mfrc522.PICC_ReadCardSerial()) {
+  if (mfrc522.PICC_ReadCardSerial()) {
     return;
   }
-  // Affichage de l'état de la mémoire de la carte.
-  mfrc522.PICC_DumpToSerial(&(mfrc522.uid));
+  // Card is on the reader!
 }
 
 void serialEvent() {
@@ -145,9 +143,12 @@ void serialEvent() {
   else if (messages[0] == "write") {
     lcdPrint("Scan your badge to rewrite ID! ->");
     ledBlink(true, true, 1, 100);
+    // We need to reset the RFID reader for some weird reason...
+    SPI.begin();
+    mfrc522.PCD_Init();
     // Waiting for the user to scan their badge/card.
     while (!(mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial())) {}
-    process(20, 100, "Writing new     ID...");
+    process(20, 150, "Writing new     ID");
     lcdPrint("Write done! Badge reconfigured.");
     ledBlink(false, true, 15, 100);
     Serial.println("write:ok");
@@ -217,30 +218,26 @@ void lcdClear() {
 void initialize() {
   ledBlink(true, true, 20, 80);
   lcdPrint("Please scan your badge! ->");
+  // We need to reset the RFID reader for some weird reason...
+  SPI.begin();
+  mfrc522.PCD_Init();
   while (!(mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial())) {}
-  process(20, 120, "Scanning...");
+  process(20, 150, "Scanning");
   lcdPrint("Authentication success!");
-  ledBlink(false, true, 15, 100);
+  ledBlink(false, true, 30, 100);
+  delay(1000);
+  lcdClear();
   Serial.println("init:ok");
 }
 
 void process(int numberOfPrints, unsigned int timeStep, String message) {
-  for(int k = 0; k < numberOfPrints; k++) {
-      switch(k % 4) {
-        case 0:
-          message += " /";
-          break;
-        case 1:
-          message += " -";
-          break;
-        case 2:
-          message += " \\";
-          break;
-        case 3:
-          message += " |";
-          break;
-      }
-      lcdPrint(message);
-      delay(timeStep);
+  String temp{message};
+  for (int k = 0; k < numberOfPrints; k++) {
+    if (k % 4 == 3) {
+      temp = message;
     }
+    temp += ".";
+    lcdPrint(temp);
+    delay(timeStep);
+  }
 }
