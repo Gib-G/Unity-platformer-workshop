@@ -23938,23 +23938,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4309045867402596913, guid: 80243d1801b8a2d4784a38039000dfc5, type: 3}
       propertyPath: text1WhenHacked
-      value: 'Fetching employee table...
-
-        No data found...'
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 4309045867402596913, guid: 80243d1801b8a2d4784a38039000dfc5, type: 3}
       propertyPath: text2WhenHacked
-      value: '> root@terminal4 /dev/sda2/t_hack/bin/# ./rfid -id'
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 4309045867402596913, guid: 80243d1801b8a2d4784a38039000dfc5, type: 3}
       propertyPath: textWhenActivated
       value: '> Terminal 4
 
 
-        > Admin@terminal4 ~$ cd /dev/sda2/t_hack/bin
-
-        >
-        Admin@terminal4 /dev/sda2/t_hack/bin/$ ./hack'
+        > WELL DONE!!'
       objectReference: {fileID: 0}
     - target: {fileID: 5875734029224746791, guid: 80243d1801b8a2d4784a38039000dfc5, type: 3}
       propertyPath: m_RootOrder
