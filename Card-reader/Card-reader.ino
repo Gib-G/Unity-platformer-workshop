@@ -211,11 +211,12 @@ void lcdClear() {
 }
 
 void initialize() {
+  lcdClear();
   ledBlink(true, true, 20, 80);
   lcdPrint("Please scan your badge! ->");
   waitForCard(true);
   process(20, 150, "Scanning");
-  lcdPrint("Authentication success!");
+  lcdPrint("Access granted!");
   ledBlink(false, true, 30, 100);
   delay(1000);
   lcdClear();
