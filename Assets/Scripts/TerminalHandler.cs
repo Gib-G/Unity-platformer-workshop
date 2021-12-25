@@ -35,6 +35,9 @@ public class TerminalHandler : MonoBehaviour
     // Last message sent to the Arduino part on the serial bus.
     private string lastMessage = "";
 
+    // A flag set to false when the init phase is done.
+    private bool initializing = true;
+
     public void Start()
     {
         Time.timeScale = 0;
@@ -73,6 +76,7 @@ public class TerminalHandler : MonoBehaviour
         string message = _serialPort.ReadLine();
         if (message == "init:ok")
         {
+            initializing = false;
             initScreen.SetActive(false);
             Time.timeScale = 1;
         }
@@ -129,7 +133,9 @@ public class TerminalHandler : MonoBehaviour
         else
         {
             // Same as above.
-            if(lastMessage == "nan") { return; }
+            // We also prevent sending a first undesired "nan" during the 
+            // init phase.
+            if(initializing || lastMessage == "nan") { return; }
             lastMessage = "nan";
             _serialPort.WriteLine("nan");
         }
@@ -192,6 +198,8 @@ public class TerminalHandler : MonoBehaviour
         activatedTerminalScreen.SetActive(true);
         hackedTerminalScreen.SetActive(true);
         initScreen.SetActive(true);
+        // To clear the LCD.
+        _serialPort.WriteLine("nan");
         Game.DisplayStartMenu();
     }
 }
