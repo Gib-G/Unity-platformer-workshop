@@ -91,63 +91,67 @@ void loop() {
 }
 
 void serialEvent() {
-  // Gets the last message sent by the Unity part.
-  String message{Serial.readStringUntil('\r')};
-  // Actions based on the type of message received.
-  // Initialization phase.
-  if (message == "init") {
-    initialize();
+  while (Serial.available()) {
+    // Gets the last message sent by the Unity part.
+    String message{Serial.readStringUntil('\r')};
+    // Gets rid of the remaining garbage in the serial bus.
+    Serial.read();
+    // Actions based on the type of message received.
+    // Initialization phase.
+    if (message == "init") {
+      initialize();
+    }
+    // We receive the number of a terminal.
+    else if (message == "1"
+             || message == "2"
+             || message == "3"
+             || message == "4"
+            ) {
+      lcdPrint("Terminal " + message);
+      ledBlink(true, true, 2, 350);
+    }
+    // The player just move away from a terminal.
+    else if (message == "nan") {
+      lcdClear();
+    }
+    // Terminal activated!
+    else if (message == "card:ok") {
+      lcdPrint("Terminal activated!");
+      ledBlink(false, true, 15, 100);
+    }
+    // Auth to terminal failed (wrong ID).
+    else if (message == "card:ko") {
+      lcdPrint("Access denied!");
+      ledBlink(true, false, 15, 100);
+    }
+    // The player has hacked a terminal.
+    else if (message == "hacked") {
+      lcdPrint("#&??+--#!(*###o^?_|/!#,??-++/##");
+      ledBlink(true, true, 2, 400);
+    }
+    // Simulates the player writing a new employee ID
+    // into their card/badge.
+    else if (message == "write") {
+      lcdPrint("Scan your badge to rewrite ID!");
+      ledBlink(true, true, 1, 100);
+      // Waiting for the user to scan their badge/card.
+      waitForCard(true);
+      process(20, 150, "Writing new     ID");
+      lcdPrint("Done! Badge reconfigured.");
+      ledBlink(false, true, 15, 100);
+      Serial.println("write:ok");
+    }
+    // The Unity part sends the ID stored on the card.
+    else if (message.substring(0, 3) == "id:") {
+      lcdPrint("Employee ID is  " + message.substring(3));
+      ledBlink(false, true, 2, 300);
+    }
+    // Manual control.
+    else if (message == "led_green_on") digitalWrite(LED_GREEN, true);
+    else if (message == "led_green_off") digitalWrite(LED_GREEN, false);
+    else if (message == "led_red_on") digitalWrite(LED_RED, HIGH);
+    else if (message == "led_red_off") digitalWrite(LED_RED, LOW);
   }
-  // We receive the number of a terminal.
-  else if (message == "1"
-           || message == "2"
-           || message == "3"
-           || message == "4"
-          ) {
-    lcdPrint("Terminal " + message);
-    ledBlink(true, true, 2, 350);
-  }
-  // The player just move away from a terminal.
-  else if (message == "nan") {
-    lcdClear();
-  }
-  // Terminal activated!
-  else if (message == "card:ok") {
-    lcdPrint("Terminal activated!");
-    ledBlink(false, true, 15, 100);
-  }
-  // Auth to terminal failed (wrong ID).
-  else if (message == "card:ko") {
-    lcdPrint("Access denied!");
-    ledBlink(true, false, 15, 100);
-  }
-  // The player has hacked a terminal.
-  else if (message == "hacked") {
-    lcdPrint("#&??+--#!(*###o^?_|/!#,??-++/##");
-    ledBlink(true, true, 2, 400);
-  }
-  // Simulates the player writing a new employee ID
-  // into their card/badge.
-  else if (message == "write") {
-    lcdPrint("Scan your badge to rewrite ID!");
-    ledBlink(true, true, 1, 100);
-    // Waiting for the user to scan their badge/card.
-    waitForCard(true);
-    process(20, 150, "Writing new     ID");
-    lcdPrint("Done! Badge reconfigured.");
-    ledBlink(false, true, 15, 100);
-    Serial.println("write:ok");
-  }
-  // The Unity part sends the ID stored on the card.
-  else if (message.substring(0, 3) == "id:") {
-    lcdPrint("Employee ID is  " + message.substring(3));
-    ledBlink(false, true, 2, 300);
-  }
-  // Manual control.
-  else if (message == "led_green_on") digitalWrite(LED_GREEN, true);
-  else if (message == "led_green_off") digitalWrite(LED_GREEN, false);
-  else if (message == "led_red_on") digitalWrite(LED_RED, HIGH);
-  else if (message == "led_red_off") digitalWrite(LED_RED, LOW);
 }
 
 void ledBlink(bool red, bool green, int numberOfBlinks, unsigned int period) {
