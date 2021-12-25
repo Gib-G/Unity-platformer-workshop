@@ -1091,10 +1091,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6494447325badbd45a1636595030c6e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  activatedTerminalScreen: {fileID: 1584397207973482126}
-  hackedTerminalScreen: {fileID: 1584397208344691716}
-  activatedTerminalScreenPreselectedButton: {fileID: 1584397208286646543}
-  hackedTerminalScreenPreselectedButton: {fileID: 0}
+  firstTerminal: {fileID: 0}
+  serialPort: COM3
+  baudrate: 115200
 --- !u!1 &1584397208762363909
 GameObject:
   m_ObjectHideFlags: 0
@@ -1382,7 +1381,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1584397208633461459}
         m_TargetAssemblyTypeName: TerminalHandler, Assembly-CSharp
-        m_MethodName: hackTerminal
+        m_MethodName: reconfigureBadge
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
