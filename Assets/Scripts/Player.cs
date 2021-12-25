@@ -401,21 +401,19 @@ public class Player : MonoBehaviour
     void RespondToTileType()
     {
         var tile = tilemap[Position];
-        if(terminalHandler != null)
+        if (tile == null)
         {
-            if(tile == null)
+            if (terminalHandler != null)
             {
                 terminalHandler.sendTerminalNumber(null);
-                return;
-            }
-            else if(tile.isTerminal)
-            {
-                Terminal terminal = tile.gameObject.GetComponent<Terminal>();
-                terminalHandler.sendTerminalNumber(terminal);
-                return;
             }
         }
-        if (tile.isLevelGoal) Game.CompleteLevel();
+        else if (tile.isTerminal && terminalHandler != null)
+        {
+            Terminal terminal = tile.gameObject.GetComponent<Terminal>();
+            terminalHandler.sendTerminalNumber(terminal);
+        }
+        else if (tile.isLevelGoal) Game.CompleteLevel();
         else if (tile.isDeathBlock) Game.RetryLevel();
     }
 
