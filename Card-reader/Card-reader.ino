@@ -64,13 +64,9 @@ void process(int numberOfPrints, unsigned int timeStep, String message);
 // Waits for the user to scan their card on the reader.
 // Returns false if no card is presented and blocking is
 // set to false. Returns true if a card is presented.
-// If blocking is set to true, this function doesn't 
+// If blocking is set to true, this function doesn't
 // return until a card is presented to the reader.
 bool waitForCard(bool blocking);
-
-// Message buffer: used to buffer messages received from
-// the game on the serial bus.
-String messages[2] {};
 
 void setup() {
   pinMode(LED_RED, OUTPUT);
@@ -86,7 +82,7 @@ void setup() {
 }
 
 void loop() {
-  if(!waitForCard(false)) {
+  if (!waitForCard(false)) {
     return;
   }
   // User scanned their card!
@@ -95,49 +91,44 @@ void loop() {
 }
 
 void serialEvent() {
-  messages[1] = messages[0];
-  // Gets the last message sent by the game and
-  // put it in the first block of the message buffer.
-  messages[0] = Serial.readStringUntil('\r');
-  // Actions based on the type of messages received.
+  // Gets the last message sent by the Unity part.
+  String message{Serial.readStringUntil('\r')};
+  // Actions based on the type of message received.
   // Initialization phase.
-  if (messages[0] == "init") {
+  if (message == "init") {
     initialize();
   }
   // We receive the number of a terminal.
-  else if (messages[0] == "1"
-           || messages[0] == "2"
-           || messages[0] == "3"
-           || messages[0] == "4"
+  else if (message == "1"
+           || message == "2"
+           || message == "3"
+           || message == "4"
           ) {
-    // The player just arrived in front of a terminal.
-    if (messages[0] != messages[1]) {
-      lcdPrint("Terminal " + messages[0]);
-      ledBlink(true, true, 2, 350);
-    }
+    lcdPrint("Terminal " + message);
+    ledBlink(true, true, 2, 350);
   }
   // The player just move away from a terminal.
-  else if (messages[0] == "nan" && messages[1] != messages[0]) {
+  else if (message == "nan") {
     lcdClear();
   }
   // Terminal activated!
-  else if (messages[0] == "card:ok") {
+  else if (message == "card:ok") {
     lcdPrint("Terminal activated!");
     ledBlink(false, true, 15, 100);
   }
   // Auth to terminal failed (wrong ID).
-  else if (messages[0] == "card:ko") {
+  else if (message == "card:ko") {
     lcdPrint("Access denied!");
     ledBlink(true, false, 15, 100);
   }
   // The player has hacked a terminal.
-  else if (messages[0] == "hacked") {
+  else if (message == "hacked") {
     lcdPrint("#&??+--#!(*###o^?_|/!#,??-++/##");
     ledBlink(true, true, 2, 400);
   }
   // Simulates the player writing a new employee ID
   // into their card/badge.
-  else if (messages[0] == "write") {
+  else if (message == "write") {
     lcdPrint("Scan your badge to rewrite ID!");
     ledBlink(true, true, 1, 100);
     // Waiting for the user to scan their badge/card.
@@ -148,15 +139,15 @@ void serialEvent() {
     Serial.println("write:ok");
   }
   // The Unity part sends the ID stored on the card.
-  else if(messages[0].substring(0, 3) == "id:") {
-    lcdPrint("Employee ID is  " + messages[0].substring(3));
+  else if (message.substring(0, 3) == "id:") {
+    lcdPrint("Employee ID is  " + message.substring(3));
     ledBlink(false, true, 2, 300);
   }
   // Manual control.
-  else if (messages[0] == "led_green_on") digitalWrite(LED_GREEN, true);
-  else if (messages[0] == "led_green_off") digitalWrite(LED_GREEN, false);
-  else if (messages[0] == "led_red_on") digitalWrite(LED_RED, HIGH);
-  else if (messages[0] == "led_red_off") digitalWrite(LED_RED, LOW);
+  else if (message == "led_green_on") digitalWrite(LED_GREEN, true);
+  else if (message == "led_green_off") digitalWrite(LED_GREEN, false);
+  else if (message == "led_red_on") digitalWrite(LED_RED, HIGH);
+  else if (message == "led_red_off") digitalWrite(LED_RED, LOW);
 }
 
 void ledBlink(bool red, bool green, int numberOfBlinks, unsigned int period) {
@@ -211,6 +202,7 @@ void lcdPrint(String const& message) {
 }
 
 void lcdClear() {
+  lcd.begin(16, 2);
   lcd.clear();
 }
 
@@ -242,7 +234,7 @@ bool waitForCard(bool blocking) {
   // Resetting the RFID card reader.
   SPI.begin();
   mfrc522.PCD_Init();
-  if(blocking) {
+  if (blocking) {
     while (!(mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial())) {}
     return true;
   }
