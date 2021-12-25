@@ -61,6 +61,13 @@ void initialize();
 // Each print is separated by timeStep ms.
 void process(int numberOfPrints, unsigned int timeStep, String message);
 
+// Waits for the user to scan their card on the reader.
+// Returns false if no card is presented and blocking is
+// set to false. Returns true if a card is presented.
+// If blocking is set to true, this function doesn't 
+// return until a card is presented to the reader.
+bool waitForCard(bool blocking);
+
 // Message buffer: used to buffer messages received from
 // the game on the serial bus.
 String messages[2] {};
@@ -75,21 +82,16 @@ void setup() {
   Serial.begin(115200);
   while (!Serial);
 
-  // Initialisation du Module RFID.
-  SPI.begin();
-  mfrc522.PCD_Init();
-
   mfrc522.PCD_SetAntennaGain(mfrc522.RxGain_max);
 }
 
 void loop() {
-  if (mfrc522.PICC_IsNewCardPresent()) {
+  if(!waitForCard(false)) {
     return;
   }
-  if (mfrc522.PICC_ReadCardSerial()) {
-    return;
-  }
-  // Card is on the reader!
+  // User scanned their card!
+  // We notify the Unity part!
+  Serial.println("card");
 }
 
 void serialEvent() {
@@ -111,13 +113,8 @@ void serialEvent() {
     // The player just arrived in front of a terminal.
     if (messages[0] != messages[1]) {
       lcdPrint("Terminal " + messages[0]);
-      ledBlink(true, true, 5, 300);
+      ledBlink(true, true, 2, 350);
     }
-    if (!(mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial())) {
-      return;
-    }
-    // User scans their card/badge.
-    Serial.println("card");
   }
   // The player just move away from a terminal.
   else if (messages[0] == "nan" && messages[1] != messages[0]) {
@@ -141,17 +138,19 @@ void serialEvent() {
   // Simulates the player writing a new employee ID
   // into their card/badge.
   else if (messages[0] == "write") {
-    lcdPrint("Scan your badge to rewrite ID! ->");
+    lcdPrint("Scan your badge to rewrite ID!");
     ledBlink(true, true, 1, 100);
-    // We need to reset the RFID reader for some weird reason...
-    SPI.begin();
-    mfrc522.PCD_Init();
     // Waiting for the user to scan their badge/card.
-    while (!(mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial())) {}
+    waitForCard(true);
     process(20, 150, "Writing new     ID");
-    lcdPrint("Write done! Badge reconfigured.");
+    lcdPrint("Done! Badge reconfigured.");
     ledBlink(false, true, 15, 100);
     Serial.println("write:ok");
+  }
+  // The Unity part sends the ID stored on the card.
+  else if(messages[0].substring(0, 3) == "id:") {
+    lcdPrint("Employee ID is  " + messages[0].substring(3));
+    ledBlink(false, true, 2, 300);
   }
   // Manual control.
   else if (messages[0] == "led_green_on") digitalWrite(LED_GREEN, true);
@@ -218,10 +217,7 @@ void lcdClear() {
 void initialize() {
   ledBlink(true, true, 20, 80);
   lcdPrint("Please scan your badge! ->");
-  // We need to reset the RFID reader for some weird reason...
-  SPI.begin();
-  mfrc522.PCD_Init();
-  while (!(mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial())) {}
+  waitForCard(true);
   process(20, 150, "Scanning");
   lcdPrint("Authentication success!");
   ledBlink(false, true, 30, 100);
@@ -239,5 +235,21 @@ void process(int numberOfPrints, unsigned int timeStep, String message) {
     temp += ".";
     lcdPrint(temp);
     delay(timeStep);
+  }
+}
+
+bool waitForCard(bool blocking) {
+  // Resetting the RFID card reader.
+  SPI.begin();
+  mfrc522.PCD_Init();
+  if(blocking) {
+    while (!(mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial())) {}
+    return true;
+  }
+  else {
+    if (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial()) {
+      return true;
+    }
+    return false;
   }
 }

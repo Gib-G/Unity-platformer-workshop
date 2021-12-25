@@ -31,6 +31,9 @@ public class TerminalHandler : MonoBehaviour
     public int baudrate = 115200;
     private SerialPort _serialPort;
 
+    // Last message sent to the Arduino part on the serial bus.
+    private string lastMessage = "";
+
     public void Start()
     {
         Time.timeScale = 0;
@@ -77,23 +80,34 @@ public class TerminalHandler : MonoBehaviour
         {
 
         }
-        // User scans their badge when in front of a terminal.
-        else if(message == "card" && currentTerminal != null)
+        // User scans their badge...
+        else if(message == "card")
         {
-            if(currentTerminal.IDToActivate == IDInCard)
+            // ...in front of a terminal.
+            if(currentTerminal != null)
             {
-                // The ID on the badge and the one needed to activate the 
-                // terminal match. The terminal gets activated.
-                // We notify the Arduino part.
-                _serialPort.WriteLine("card:ok");
-                activateTerminal(currentTerminal);
+                if (currentTerminal.IDToActivate == IDInCard)
+                {
+                    // The ID on the badge and the one needed to activate the 
+                    // terminal match. The terminal gets activated.
+                    // We notify the Arduino part.
+                    _serialPort.WriteLine("card:ok");
+                    activateTerminal(currentTerminal);
+                }
+                else
+                {
+                    // The ID on the badge and the one needed to activate the 
+                    // terminal don't match.
+                    // We notify the Arduino part.
+                    _serialPort.WriteLine("card:ko");
+                }
             }
+            // ...not in front of a terminal.
+            // In this case, we just want to send the ID stored on the card to the 
+            // Arduino part, so the player can check it anytime!
             else
             {
-                // The ID on the badge and the one needed to activate the 
-                // terminal don't match.
-                // We notify the Arduino part.
-                _serialPort.WriteLine("card:ko");
+                _serialPort.WriteLine("id:" + IDInCard);
             }
         }
     }
@@ -103,10 +117,18 @@ public class TerminalHandler : MonoBehaviour
         currentTerminal = terminal;
         if(currentTerminal != null)
         {
-            _serialPort.WriteLine(terminal.number.ToString());
+            string message = terminal.number.ToString();
+            // Comparing the message to send to the previously sent message.
+            // If they're the same, no need to send again (don't spam the serial bus).
+            if(message == lastMessage) { return; }
+            lastMessage = message;
+            _serialPort.WriteLine(message);
         }
         else
         {
+            // Same as above.
+            if(lastMessage == "nan") { return; }
+            lastMessage = "nan";
             _serialPort.WriteLine("nan");
         }
     }
