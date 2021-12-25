@@ -9,7 +9,7 @@ public class TerminalHandler : MonoBehaviour
 {
     // Since we can't write into the RFID tag, we store the employee
     // ID here, instead of in the badge/card.
-    private int IDInCard;
+    private string IDInCard;
     private int activatedTerminals = 0;
 
     // The terminal the player is facing in the game, if any.
@@ -21,6 +21,7 @@ public class TerminalHandler : MonoBehaviour
     // Menu related stuff.
     private GameObject initScreen, activatedTerminalScreen, hackedTerminalScreen;
     private GameObject initScreenPreselectedButton, activatedTerminalScreenPreselectedButton, hackedTerminalScreenPreselectedButton;
+    private InputField IDInput;
 
     // The text game objects used to prompt terminal messages
     // (Terminal.textWhenActivated, Terminal.text1WhenHacked, etc...).
@@ -40,7 +41,7 @@ public class TerminalHandler : MonoBehaviour
 
         // The ID stored in the user's badge/card gets initialized with
         // the ID needed to activate the first terminal.
-        IDInCard = firstTerminal.GetComponent<Terminal>().IDToActivate;
+        IDInCard = firstTerminal.GetComponent<Terminal>().IDToActivate.ToString();
 
         // Gathering some child game objects.
         initScreen = transform.Find("Init").gameObject;
@@ -52,6 +53,7 @@ public class TerminalHandler : MonoBehaviour
         textWhenActivated = activatedTerminalScreen.transform.Find("TerminalPrompt").gameObject.GetComponent<Text>();
         text1WhenHacked = hackedTerminalScreen.transform.Find("TerminalPrompt1").gameObject.GetComponent<Text>();
         text2WhenHacked = hackedTerminalScreen.transform.Find("TerminalPrompt2").gameObject.GetComponent<Text>();
+        IDInput = hackedTerminalScreen.transform.Find("IDInput").gameObject.GetComponent<InputField>();
 
         activatedTerminalScreen.SetActive(false);
         hackedTerminalScreen.SetActive(false);
@@ -78,7 +80,7 @@ public class TerminalHandler : MonoBehaviour
         // in the user's badge/card.
         else if(message == "write:ok")
         {
-
+            IDInCard = IDInput.text;
         }
         // User scans their badge...
         else if(message == "card")
@@ -86,7 +88,7 @@ public class TerminalHandler : MonoBehaviour
             // ...in front of a terminal.
             if(currentTerminal != null)
             {
-                if (currentTerminal.IDToActivate == IDInCard)
+                if (currentTerminal.IDToActivate.ToString() == IDInCard)
                 {
                     // The ID on the badge and the one needed to activate the 
                     // terminal match. The terminal gets activated.
@@ -149,7 +151,7 @@ public class TerminalHandler : MonoBehaviour
         // All terminals are activated. The player can finish the level.
         if(activatedTerminals > 3)
         {
-
+            Game.CompleteLevel();
         }
     }
 
@@ -185,4 +187,11 @@ public class TerminalHandler : MonoBehaviour
         Time.timeScale = 1;
     }
 
+    public void loadMainMenu()
+    {
+        activatedTerminalScreen.SetActive(true);
+        hackedTerminalScreen.SetActive(true);
+        initScreen.SetActive(true);
+        Game.DisplayStartMenu();
+    }
 }

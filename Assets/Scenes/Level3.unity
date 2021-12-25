@@ -330,6 +330,54 @@ PrefabInstance:
       propertyPath: m_Name
       value: Terminal1
       objectReference: {fileID: 0}
+    - target: {fileID: 4309045867402596913, guid: 80243d1801b8a2d4784a38039000dfc5, type: 3}
+      propertyPath: number
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4309045867402596913, guid: 80243d1801b8a2d4784a38039000dfc5, type: 3}
+      propertyPath: IDToActivate
+      value: 268911
+      objectReference: {fileID: 0}
+    - target: {fileID: 4309045867402596913, guid: 80243d1801b8a2d4784a38039000dfc5, type: 3}
+      propertyPath: text1WhenHacked
+      value: 'Fetching employee table...
+
+        +--------------------+--------+--------+--------+--------+
+
+        |
+        employee_name   -> | J???   | ?oh?   | ????   | ???e   |
+
+        +--------------------+--------+--------+--------+--------+
+
+        |
+        employee_ID     -> | ?1???0 | ???377 | ?5?9?? | ???9?? |
+
+        +--------------------+--------+--------+--------+--------+
+
+        |
+        terminal_access -> | 2      | ?      | ?      | ?      |
+
+        +--------------------+--------+--------+--------+--------+
+
+        Data
+        dump successful!
+
+'
+      objectReference: {fileID: 0}
+    - target: {fileID: 4309045867402596913, guid: 80243d1801b8a2d4784a38039000dfc5, type: 3}
+      propertyPath: text2WhenHacked
+      value: '> root@terminal1 /dev/sda2/t_hack/bin/# ./rfid -id'
+      objectReference: {fileID: 0}
+    - target: {fileID: 4309045867402596913, guid: 80243d1801b8a2d4784a38039000dfc5, type: 3}
+      propertyPath: textWhenActivated
+      value: '> Terminal 1
+
+
+        > Admin@terminal1 ~$ cd /dev/sda2/t_hack/bin
+
+        >
+        Admin@terminal1 /dev/sda2/t_hack/bin/$ ./hack'
+      objectReference: {fileID: 0}
     - target: {fileID: 5875734029224746791, guid: 80243d1801b8a2d4784a38039000dfc5, type: 3}
       propertyPath: m_RootOrder
       value: 716
@@ -23880,6 +23928,34 @@ PrefabInstance:
       propertyPath: m_Name
       value: Terminal4
       objectReference: {fileID: 0}
+    - target: {fileID: 4309045867402596913, guid: 80243d1801b8a2d4784a38039000dfc5, type: 3}
+      propertyPath: number
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 4309045867402596913, guid: 80243d1801b8a2d4784a38039000dfc5, type: 3}
+      propertyPath: IDToActivate
+      value: 940377
+      objectReference: {fileID: 0}
+    - target: {fileID: 4309045867402596913, guid: 80243d1801b8a2d4784a38039000dfc5, type: 3}
+      propertyPath: text1WhenHacked
+      value: 'Fetching employee table...
+
+        No data found...'
+      objectReference: {fileID: 0}
+    - target: {fileID: 4309045867402596913, guid: 80243d1801b8a2d4784a38039000dfc5, type: 3}
+      propertyPath: text2WhenHacked
+      value: '> root@terminal4 /dev/sda2/t_hack/bin/# ./rfid -id'
+      objectReference: {fileID: 0}
+    - target: {fileID: 4309045867402596913, guid: 80243d1801b8a2d4784a38039000dfc5, type: 3}
+      propertyPath: textWhenActivated
+      value: '> Terminal 4
+
+
+        > Admin@terminal4 ~$ cd /dev/sda2/t_hack/bin
+
+        >
+        Admin@terminal4 /dev/sda2/t_hack/bin/$ ./hack'
+      objectReference: {fileID: 0}
     - target: {fileID: 5875734029224746791, guid: 80243d1801b8a2d4784a38039000dfc5, type: 3}
       propertyPath: m_RootOrder
       value: 715
@@ -28038,6 +28114,52 @@ PrefabInstance:
     - target: {fileID: 644148014462488440, guid: 80243d1801b8a2d4784a38039000dfc5, type: 3}
       propertyPath: m_Name
       value: Terminal3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4309045867402596913, guid: 80243d1801b8a2d4784a38039000dfc5, type: 3}
+      propertyPath: number
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4309045867402596913, guid: 80243d1801b8a2d4784a38039000dfc5, type: 3}
+      propertyPath: IDToActivate
+      value: 159974
+      objectReference: {fileID: 0}
+    - target: {fileID: 4309045867402596913, guid: 80243d1801b8a2d4784a38039000dfc5, type: 3}
+      propertyPath: text1WhenHacked
+      value: 'Fetching employee table...
+
+        +--------------------+--------+--------+--------+--------+
+
+        |
+        employee_name   -> | J?l?   | Jac?   | ?a??   | ????   |
+
+        +--------------------+--------+--------+--------+--------+
+
+        |
+        employee_ID     -> | ???9?4 | 3?172? | 268911 | ?4???? |
+
+        +--------------------+--------+--------+--------+--------+
+
+        |
+        terminal_access -> | ?      | ?      | 1      | ?      |
+
+        +--------------------+--------+--------+--------+--------+
+
+        Data
+        dump successful!'
+      objectReference: {fileID: 0}
+    - target: {fileID: 4309045867402596913, guid: 80243d1801b8a2d4784a38039000dfc5, type: 3}
+      propertyPath: text2WhenHacked
+      value: '> root@terminal3 /dev/sda2/t_hack/bin/# ./rfid -id'
+      objectReference: {fileID: 0}
+    - target: {fileID: 4309045867402596913, guid: 80243d1801b8a2d4784a38039000dfc5, type: 3}
+      propertyPath: textWhenActivated
+      value: '> Terminal 3
+
+
+        > Admin@terminal3 ~$ cd /dev/sda2/t_hack/bin
+
+        >
+        Admin@terminal3 /dev/sda2/t_hack/bin/$ ./hack'
       objectReference: {fileID: 0}
     - target: {fileID: 5875734029224746791, guid: 80243d1801b8a2d4784a38039000dfc5, type: 3}
       propertyPath: m_RootOrder
@@ -44939,6 +45061,52 @@ PrefabInstance:
       propertyPath: m_Name
       value: Terminal2
       objectReference: {fileID: 0}
+    - target: {fileID: 4309045867402596913, guid: 80243d1801b8a2d4784a38039000dfc5, type: 3}
+      propertyPath: number
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4309045867402596913, guid: 80243d1801b8a2d4784a38039000dfc5, type: 3}
+      propertyPath: IDToActivate
+      value: 311720
+      objectReference: {fileID: 0}
+    - target: {fileID: 4309045867402596913, guid: 80243d1801b8a2d4784a38039000dfc5, type: 3}
+      propertyPath: text1WhenHacked
+      value: 'Fetching employee table...
+
+        +--------------------+--------+--------+--------+--------+
+
+        |
+        employee_name   -> | J??n   | ?u?y   | J?n?   | ?a?k   |
+
+        +--------------------+--------+--------+--------+--------+
+
+        |
+        employee_ID     -> | 940??? | 1?997? | ???9?? | 3????0 |
+
+        +--------------------+--------+--------+--------+--------+
+
+        |
+        terminal_access -> | ?      | 3      | ?      | ?      |
+
+        +--------------------+--------+--------+--------+--------+
+
+        Data
+        dump successful!'
+      objectReference: {fileID: 0}
+    - target: {fileID: 4309045867402596913, guid: 80243d1801b8a2d4784a38039000dfc5, type: 3}
+      propertyPath: text2WhenHacked
+      value: '> root@terminal2 /dev/sda2/t_hack/bin/# ./rfid -id'
+      objectReference: {fileID: 0}
+    - target: {fileID: 4309045867402596913, guid: 80243d1801b8a2d4784a38039000dfc5, type: 3}
+      propertyPath: textWhenActivated
+      value: '> Terminal 2
+
+
+        > Admin@terminal2 ~$ cd /dev/sda2/t_hack/bin
+
+        >
+        Admin@terminal2 /dev/sda2/t_hack/bin/$ ./hack'
+      objectReference: {fileID: 0}
     - target: {fileID: 5875734029224746791, guid: 80243d1801b8a2d4784a38039000dfc5, type: 3}
       propertyPath: m_RootOrder
       value: 718
@@ -54037,7 +54205,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1584397208344691716, guid: b8cb26941ab79784898e89828540ce5f, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1584397208633461458, guid: b8cb26941ab79784898e89828540ce5f, type: 3}
       propertyPath: m_Pivot.x
@@ -54145,11 +54313,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1584397208633461462, guid: b8cb26941ab79784898e89828540ce5f, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1584397208762363907, guid: b8cb26941ab79784898e89828540ce5f, type: 3}
       propertyPath: m_Text
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2191042111631126816, guid: b8cb26941ab79784898e89828540ce5f, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 138
+      objectReference: {fileID: 0}
+    - target: {fileID: 2191042111631126816, guid: b8cb26941ab79784898e89828540ce5f, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -100
       objectReference: {fileID: 0}
     - target: {fileID: 3064482001166611634, guid: b8cb26941ab79784898e89828540ce5f, type: 3}
       propertyPath: m_Color.a
@@ -54169,9 +54345,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8822882595460253507, guid: b8cb26941ab79784898e89828540ce5f, type: 3}
       propertyPath: m_Text
-      value: '
-
-'
+      value: '> root@terminal3 /dev/sda2/t_hack/bin/# ./rfid -id'
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b8cb26941ab79784898e89828540ce5f, type: 3}
