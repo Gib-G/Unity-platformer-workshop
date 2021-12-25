@@ -68,6 +68,11 @@ void process(int numberOfPrints, unsigned int timeStep, String message);
 // return until a card is presented to the reader.
 bool waitForCard(bool blocking);
 
+// A flag that is set to true when the Unity part
+// initiates the init phase ("init" is received via the
+// serial bus).
+bool initializing{false};
+
 void setup() {
   pinMode(LED_RED, OUTPUT);
   pinMode(LED_GREEN, OUTPUT);
@@ -85,9 +90,21 @@ void loop() {
   if (!waitForCard(false)) {
     return;
   }
-  // User scanned their card!
-  // We notify the Unity part!
-  Serial.println("card");
+  // User scans their card...
+  // ...during the init phase.
+  if (initializing) {
+    process(20, 150, "Scanning");
+    lcdPrint("Access granted!");
+    ledBlink(false, true, 30, 100);
+    delay(1000);
+    lcdClear();
+    initializing = false;
+    Serial.println("init:ok");
+  }
+  // ...after the init phase (in-game).
+  else {
+    Serial.println("card");
+  }
 }
 
 void serialEvent() {
@@ -99,7 +116,10 @@ void serialEvent() {
     // Actions based on the type of message received.
     // Initialization phase.
     if (message == "init") {
-      initialize();
+      lcdClear();
+      ledBlink(true, true, 20, 80);
+      lcdPrint("Please scan your badge! ->");
+      initializing = true;
     }
     // We receive the number of a terminal.
     else if (message == "1"
