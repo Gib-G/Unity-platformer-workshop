@@ -123,7 +123,7 @@ public class TerminalHandler : MonoBehaviour
         currentTerminal = terminal;
         if(currentTerminal != null)
         {
-            string message = terminal.number.ToString();
+            string message = "terminal:" + terminal.number;
             // Comparing the message to send to the previously sent message.
             // If they're the same, no need to send again (don't spam the serial bus).
             if(message == lastMessage) { return; }
@@ -133,11 +133,11 @@ public class TerminalHandler : MonoBehaviour
         else
         {
             // Same as above.
-            // We also prevent sending a first undesired "nan" during the 
+            // We also prevent sending a first undesired "no_terminal" during the 
             // init phase.
-            if(initializing || lastMessage == "nan") { return; }
-            lastMessage = "nan";
-            _serialPort.WriteLine("nan");
+            if(initializing || lastMessage == "terminal:none") { return; }
+            lastMessage = "terminal:none";
+            _serialPort.WriteLine("terminal:none");
         }
     }
     public void activateTerminal(Terminal terminal)
@@ -190,6 +190,9 @@ public class TerminalHandler : MonoBehaviour
         initScreen.SetActive(false);
         activatedTerminalScreen.SetActive(false);
         hackedTerminalScreen.SetActive(false);
+        // Tells the Arduino side to cancel all pending write
+        // operations.
+        _serialPort.WriteLine("write:cancel");
         Time.timeScale = 1;
     }
 
@@ -198,8 +201,9 @@ public class TerminalHandler : MonoBehaviour
         activatedTerminalScreen.SetActive(true);
         hackedTerminalScreen.SetActive(true);
         initScreen.SetActive(true);
-        // To clear the LCD.
-        _serialPort.WriteLine("nan");
+        // Tells the Arduino side that the init phase has been
+        // canceled.
+        _serialPort.WriteLine("init:cancel");
         Game.DisplayStartMenu();
     }
 }

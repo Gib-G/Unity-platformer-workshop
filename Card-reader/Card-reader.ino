@@ -51,12 +51,8 @@ void lcdPrint(String const& message);
 // Clears the LCD.
 void lcdClear();
 
-// Called upon initialization (when "init" is received on
-// the serial bus.
-void initialize();
-
 // Prints message on LCD numberOfPrints times.
-// For each print, " /", " -", " \", or " |" is appended
+// For each print, "." is appended
 // to message to produce a loading effect.
 // Each print is separated by timeStep ms.
 void process(int numberOfPrints, unsigned int timeStep, String message);
@@ -72,6 +68,11 @@ bool waitForCard(bool blocking);
 // initiates the init phase ("init" is received via the
 // serial bus).
 bool initializing{false};
+
+// A flag set to true when the program needs to
+// write things into the card, and waits for the
+// user to scan it to initiate the write operation.
+bool writing{false};
 
 void setup() {
   pinMode(LED_RED, OUTPUT);
@@ -101,6 +102,14 @@ void loop() {
     initializing = false;
     Serial.println("init:ok");
   }
+  // The program is waiting to write smth into the card.
+  else if (writing) {
+    process(20, 150, "Writing new     ID");
+    lcdPrint("Done! Badge reconfigured.");
+    ledBlink(false, true, 15, 100);
+    writing = false;
+    Serial.println("write:ok");
+  }
   // ...after the init phase (in-game).
   else {
     Serial.println("card");
@@ -119,20 +128,27 @@ void serialEvent() {
       lcdClear();
       ledBlink(true, true, 20, 80);
       lcdPrint("Please scan your badge! ->");
+      // Pending initialization operation in the loop function.
       initializing = true;
     }
-    // We receive the number of a terminal.
-    else if (message == "1"
-             || message == "2"
-             || message == "3"
-             || message == "4"
-            ) {
-      lcdPrint("Terminal " + message);
-      ledBlink(true, true, 2, 350);
-    }
-    // The player just move away from a terminal.
-    else if (message == "nan") {
+    // We cancel the init phase.
+    else if (message == "init:cancel") {
       lcdClear();
+      initializing = false;
+      writing = false;
+    }
+    // We receive a terminal-related message.
+    else if (message.substring(0, 9) == "terminal:") {
+      String temp = message.substring(9);
+      // The player just moved away from a terminal.
+      if (temp == "none") {
+        lcdClear();
+      }
+      // The Unity side sent the number of a terminal.
+      else {
+        lcdPrint("Terminal " + temp);
+        ledBlink(true, true, 2, 350);
+      }
     }
     // Terminal activated!
     else if (message == "card:ok") {
@@ -154,12 +170,13 @@ void serialEvent() {
     else if (message == "write") {
       lcdPrint("Scan your badge to rewrite ID!");
       ledBlink(true, true, 1, 100);
-      // Waiting for the user to scan their badge/card.
-      waitForCard(true);
-      process(20, 150, "Writing new     ID");
-      lcdPrint("Done! Badge reconfigured.");
-      ledBlink(false, true, 15, 100);
-      Serial.println("write:ok");
+      // Pending write operation in the loop function.
+      writing = true;
+    }
+    // Cancels the pending write operation.
+    else if (message == "write:cancel") {
+      lcdClear();
+      writing = false;
     }
     // The Unity part sends the ID stored on the card.
     else if (message.substring(0, 3) == "id:") {
@@ -228,19 +245,6 @@ void lcdPrint(String const& message) {
 void lcdClear() {
   lcd.begin(16, 2);
   lcd.clear();
-}
-
-void initialize() {
-  lcdClear();
-  ledBlink(true, true, 20, 80);
-  lcdPrint("Please scan your badge! ->");
-  waitForCard(true);
-  process(20, 150, "Scanning");
-  lcdPrint("Access granted!");
-  ledBlink(false, true, 30, 100);
-  delay(1000);
-  lcdClear();
-  Serial.println("init:ok");
 }
 
 void process(int numberOfPrints, unsigned int timeStep, String message) {
