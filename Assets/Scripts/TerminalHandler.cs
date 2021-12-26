@@ -57,7 +57,7 @@ public class TerminalHandler : MonoBehaviour
         hackedTerminalScreen = transform.Find("HackedTerminal").gameObject;
         initScreenPreselectedButton = initScreen.transform.Find("CancelButton").gameObject;
         activatedTerminalScreenPreselectedButton = activatedTerminalScreen.transform.Find("QuitButton").gameObject;
-        hackedTerminalScreenPreselectedButton = hackedTerminalScreen.transform.Find("IDInput").gameObject;
+        hackedTerminalScreenPreselectedButton = hackedTerminalScreen.transform.Find("QuitButton").gameObject;
         textWhenActivated = activatedTerminalScreen.transform.Find("TerminalPrompt").gameObject.GetComponent<Text>();
         text1WhenHacked = hackedTerminalScreen.transform.Find("TerminalPrompt1").gameObject.GetComponent<Text>();
         text2WhenHacked = hackedTerminalScreen.transform.Find("TerminalPrompt2").gameObject.GetComponent<Text>();
@@ -66,6 +66,8 @@ public class TerminalHandler : MonoBehaviour
         activatedTerminalScreen.SetActive(false);
         hackedTerminalScreen.SetActive(false);
         initScreen.SetActive(true);
+        EventSystem.current.SetSelectedGameObject(null);
+        EventSystem.current.SetSelectedGameObject(initScreenPreselectedButton);
 
         _serialPort = new SerialPort(serialPort, baudrate);
         _serialPort.Open();
