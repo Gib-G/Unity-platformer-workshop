@@ -38,6 +38,11 @@ public class TerminalHandler : MonoBehaviour
     // A flag set to false when the init phase is done.
     private bool initializing = true;
 
+    // A flag indicating wether the program should ignore "card" 
+    // messages from the serial bus. This is useful to avoid checking
+    // the card's ID right after the player has activated a terminal.
+    private bool ignoreCard = false;
+
     public void Start()
     {
         Time.timeScale = 0;
@@ -92,12 +97,18 @@ public class TerminalHandler : MonoBehaviour
             // ...in front of a terminal.
             if(currentTerminal != null)
             {
+                if(ignoreCard) { return; }
+                // Meant to prevent checking the ID in the card right after the player
+                // has activated the terminal.
                 if (currentTerminal.IDToActivate.ToString() == IDInCard)
                 {
                     // The ID on the badge and the one needed to activate the 
                     // terminal match. The terminal gets activated.
                     // We notify the Arduino part.
                     _serialPort.WriteLine("card:ok");
+                    // The terminal prompt opens. We can now ignore
+                    // any further auth attempt.
+                    ignoreCard = true;
                     activateTerminal(currentTerminal);
                 }
                 else
@@ -190,6 +201,8 @@ public class TerminalHandler : MonoBehaviour
         initScreen.SetActive(false);
         activatedTerminalScreen.SetActive(false);
         hackedTerminalScreen.SetActive(false);
+        // Authenticating to a terminal is possible again.
+        ignoreCard = false;
         // Tells the Arduino side to cancel all pending write
         // operations.
         _serialPort.WriteLine("write:cancel");
@@ -201,6 +214,8 @@ public class TerminalHandler : MonoBehaviour
         activatedTerminalScreen.SetActive(true);
         hackedTerminalScreen.SetActive(true);
         initScreen.SetActive(true);
+        // Authenticating to a terminal is possible again.
+        ignoreCard = false;
         // Tells the Arduino side that the init phase has been
         // canceled.
         _serialPort.WriteLine("init:cancel");
