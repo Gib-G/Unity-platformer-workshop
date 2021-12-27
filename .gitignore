@@ -73,3 +73,6 @@ crashlytics-build.properties
 
 # MS Word temp files
 *~*.docx
+
+# Video folder
+/Videos/
