@@ -76,3 +76,6 @@ crashlytics-build.properties
 
 # Video folder
 /Videos/
+
+# MS Word files
+*.docx
