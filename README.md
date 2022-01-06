@@ -9,7 +9,7 @@ A simple Unity platformer made for practical classes.
 - The `v1-demo` branch holds a WebGL build of version 1, available for you to play thanks to GitHub pages (link bellow).
 - Other branches are unstable/unrelevant development branches.
 
-<img src="./level_1.png" alt="Level 1">
+![level_1](https://user-images.githubusercontent.com/75886520/148402308-29187653-00cc-4dda-b76e-d2d2447c0baf.png)
 
 # Version 1
 
