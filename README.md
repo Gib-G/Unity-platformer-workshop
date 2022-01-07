@@ -3,7 +3,7 @@
 A simple Unity platformer made for practical classes.
 
 - Branch `v1` (this branch) contains the first version of the game.
-- Branch `v2` holds the second version of the game. In this version, I added an Arduino extension to the game, as well as another level to go with it. Check out [this README]() to discover version 2.
+- Branch `v2` holds the second version of the game. In this version, I added an Arduino extension to the game, as well as another level to go with it. Check out [this README](../v2/README.md) to discover version 2.
 
 - `*-builds` branches contain Windows and WebGL builds for each version of the game.
 - The `v1-demo` branch holds a WebGL build of version 1, available for you to play thanks to GitHub pages (link bellow).
@@ -24,7 +24,7 @@ More explicit directives for this project included:
   <li>Creating basic feedbacks to make the game more pleasing to play (again, without using tools provided by Unity).</li>
 </ul>
 
-Make sure to check out version 2 [here]() as well!
+Make sure to check out version 2 [here](../v2/README.md) as well!
 
 ## Play it!
 
