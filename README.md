@@ -17,6 +17,8 @@ Here is what the circuit looks like:
 
 ## The new level
 
+You can find a demo video down below.
+
 Version 2 adds a new level to the game to work with the circuit.
 
 This third level really has nothing to do with the two previous ones... <br>
@@ -37,7 +39,7 @@ The user still plays as a little blue square in the game. The level has 4 termin
 If the employee ID on the badge matches the one required to activate the terminal, that terminal activates. Otherwise, the player gets their access to the terminal denied (temporarily).
 
 A terminal can only be hacked by the player when activated. When hacked, each terminal dumps data about the employees who have access to the other terminals in the room.
-You can check out the data dumped by the four terminals in the level [here]() (this will make your life easier if you don't want to take notes or remember everything). 
+You can check out the data dumped by the four terminals in the level [here](./Misc/terminals.txt) (this will make your life easier if you don't want to take notes or remember everything), as well as a solution [here](./Misc/solution.txt). 
 The goal is to figure out the employee IDs required for each terminal by cross-referencing the intel you get along the way. 
 
 When the player's avatar passes in front of a terminal, the terminal number gets displayed on the LCD. <br>
@@ -55,6 +57,6 @@ https://user-images.githubusercontent.com/75886520/148527875-903f34dc-8a39-429d-
 
 ## Technical details
 
-**The ESP board and the game use serial communication encapsulated by USB to exchange data (see the specs of the small communication protocol used [here]()). The game is configured to communicate with the ESP through serial port 3. This can only be changed within the Unity editor.**
+**The ESP board and the game use serial communication encapsulated by USB to exchange data (see the specs of the small communication protocol used [here](./Misc/communication-protocol.pdf)). The game is configured to communicate with the ESP through serial port 3. This can only be changed within the Unity editor.**
 
 **Make sure the circuit is correctly connected (via USB) to the computer running the game before playing level 3!**
