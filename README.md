@@ -39,7 +39,7 @@ The user still plays as a little blue square in the game. The level has 4 termin
 If the employee ID on the badge matches the one required to activate the terminal, that terminal activates. Otherwise, the player gets their access to the terminal denied (temporarily).
 
 A terminal can only be hacked by the player when activated. When hacked, each terminal dumps data about the employees who have access to the other terminals in the room.
-You can check out the data dumped by the four terminals in the level [here](./Misc/terminals.txt) (this will make your life easier if you don't want to take notes or remember everything), as well as a solution [here](./Misc/solution.txt). 
+You can check out the data dumped by the four terminals in the level [here](./Misc/terminals.txt) (this will make your life easier if you don't want to take notes or remember everything), as well as the solution [here](./Misc/solution.txt). 
 The goal is to figure out the employee IDs required for each terminal by cross-referencing the intel you get along the way. 
 
 When the player's avatar passes in front of a terminal, the terminal number gets displayed on the LCD. <br>
