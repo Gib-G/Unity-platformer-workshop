@@ -60,3 +60,7 @@ https://user-images.githubusercontent.com/75886520/148527875-903f34dc-8a39-429d-
 **The ESP board and the game use serial communication encapsulated by USB to exchange data (see the specs of the small communication protocol used [here](./Misc/communication-protocol.pdf)). The game is configured to communicate with the ESP through serial port 3. This can only be changed within the Unity editor.**
 
 **Make sure the circuit is correctly connected (via USB) to the computer running the game before playing level 3!**
+
+## On this branch
+
+The `/Card-reader/` directory contains the Arduino sketch for the ESP.
